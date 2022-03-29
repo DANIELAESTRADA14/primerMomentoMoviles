@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Primer Momento</title>
+  </head>
+
+  <body>
+    <h1>Formulario</h1>
+    <form>
+      <label for="nombre">Identificación</label>
+      <input type="number" id="nombre" />
+      <span id="mensnombre" style="color: red"></span>
+      <br />
+      <label for="direccion">Dirección</label>
+      <input type="text" id="direccion" name="direccion" />
+      <span id="mensdireccion" style="color: red"></span>
+      <br />
+      <label for="telefono">Teléfono</label>
+      <input type="number" id="telefono" />
+      <br />
+      <label for="precio">Precio</label>
+      <input type="number" id="precio" name="precio"  />
+      <span id="mensprecio" style="color: red"></span>
+      <br />
+      <label for="estado">Estado</label>
+      <input type="text" id="estado" name="estado" />
+      <br />
+      <br />
+      <input type="button" id="btnenviar" value="Enviar" />
+      <input type="button" id="btnbuscar" value="Buscar" />
+      <input type="button" id="btnlistar" value="Listar" />
+      <input type="reset" value="Borrar información" />
+    </form>
+
+    <br /><br /><br />
+
+    <span id="resultado" style="color: black; font-size: 20px"> </span>
+
+    <script>
+      let nombre = document.getElementById("nombre");
+      let mensnombre = document.getElementById("mensnombre");
+      let direccion = document.getElementById("direccion");
+      let mensdireccion = document.getElementById("mensdireccion");
+      let telefono = document.getElementById("telefono");
+      let precio = document.getElementById("precio");
+      let mensprecio = document.getElementById("mensprecio");
+      let estado = document.getElementById("estado");
+      let btnenviar = document.getElementById("btnenviar");
+      let btnbuscar = document.getElementById("btnbuscar");
+      let btnlistar = document.getElementById("btnlistar");
+
+      nombre.addEventListener("focus", function () {
+        mensnombre.innerHTML = "Solo se aceptan numeros (1-10)";
+      });
+
+      nombre.addEventListener("blur", function () {
+        mensnombre.innerHTML = "";
+      });
+
+      direccion.addEventListener("focus", function () {
+        mensdireccion.innerHTML = "La dirección es obligatoria";
+      });
+
+      direccion.addEventListener("blur", function () {
+        mensdireccion.innerHTML = "";
+      });
+
+      precio.addEventListener("focus", function () {
+        mensprecio.innerHTML =
+          "El precio debe estar entre 100 millones y 500 millones";
+      });
+
+      precio.addEventListener("blur", function () {
+        mensprecio.innerHTML = "";
+      });
+
+      let inmuebles = [
+        {
+          idinmueble: "1",
+          direccion: "Medellín",
+          telefono: 2544741,
+          precio: 200000000,
+          estado: true,
+        },
+        {
+          idinmueble: "2",
+          direccion: "Bogotá",
+          telefono: 4587452,
+          precio: 250000000,
+          estado: true,
+        },
+        {
+          idinmueble: "3",
+          direccion: "Medellín",
+          telefono: 2658471,
+          precio: 170000000,
+          estado: false,
+        },
+        {
+          idinmueble: "4",
+          direccion: "Cali",
+          telefono: 2578411,
+          precio: 230000000,
+          estado: true,
+        },
+        {
+          idinmueble: "5",
+          direccion: "Bogotá",
+          telefono: 3658471,
+          precio: 360000000,
+          estado: false,
+        },
+        {
+          idinmueble: "6",
+          direccion: "Bucaramanga",
+          telefono: 2587413,
+          precio: 250000000,
+          estado: true,
+        },
+        {
+          idinmueble: "7",
+          direccion: "Medellín",
+          telefono: 6352417,
+          precio: 400000000,
+          estado: true,
+        },
+        {
+          idinmueble: "8",
+          direccion: "Medellín",
+          telefono: 4756871,
+          precio: 150000000,
+          estado: false,
+        },
+        {
+          idinmueble: "9",
+          direccion: "Cali",
+          telefono: 2336985,
+          precio: 290000000,
+          estado: false,
+        },
+        {
+          idinmueble: "10",
+          direccion: "Barranquilla",
+          telefono: 4785214,
+          precio: 180000000,
+          estado: true,
+        },
+      ];
+
+      
+
+      /* --------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+      function validar() {
+        let enviar = new Promise(function (resolve, reject) {
+          if (
+            nombre.value.length == 0 ||
+            direccion.value == "" ||
+            telefono.value.length == 0 ||
+            precio.value.length == 0 ||
+            estado.value == ""
+          ) {
+            reject("Los resultado son obligatorios");
+          } else {
+            resolve("resultado enviados");
+          }
+        });
+
+        return enviar;
+      }
+
+
+      btnenviar.onclick = function () {
+        validar()
+          .then(function (respuesta) {
+            alert("resultado guardados");
+          })
+          .catch(function (error) {
+            alert("Todos los resultado son requeridos");
+          });
+      };
+
+      
+      function validarPrecio(){
+        
+      }
+
+      validarPrecio()
+      /* --------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+      function principal() {
+        return new Promise(function (resolve, reject) {
+          let valor = parseFloat(prompt("Ingrese el número de ID"));
+          setTimeout(function () {
+            let resultado = inmuebles.find(function (inmueble) {
+              if (inmueble.idinmueble >= 10) {
+                reject("Producto no disponible");
+                return 0;
+              } else if (inmueble.estado == true) {
+                return inmueble.idinmueble == valor;
+              }
+            });
+
+            if (resultado) {
+              resolve(resultado);
+              console.log(resultado);
+            }
+          }, 5000);
+        });
+      }
+
+      btnbuscar.onclick = function () {
+        principal(inmuebles)
+          .then((resultado) => {
+            document.getElementById("nombre").value = resultado.idinmueble;
+            document.getElementById("direccion").value = resultado.direccion;
+            document.getElementById("telefono").value = resultado.telefono;
+            document.getElementById("precio").value = resultado.precio;
+            document.getElementById("estado").value = resultado.estado;
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      };
+
+      /* --------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+      function filtrar(inmueble) {
+        setTimeout(function () {
+          let resultado = inmuebles.filter(function (inmueble) {
+            if (inmueble.estado == true) {
+              return inmueble.precio > 200000000 && inmueble.precio < 300000000;
+            }
+          });
+
+          if (resultado) console.log(resultado);
+          let html =
+            "<table border = '1'><th>Identificación</th><th>Dirección</th><th>Precio</th><th>Estado</th>";
+          for (let i = 0; i < resultado.length; i++) {
+            html += `<tr><td>${resultado[i].idinmueble}</td>
+                            <td>${resultado[i].direccion}</td>
+                            <td>${resultado[i].precio}</td>
+                            <td>${resultado[i].estado}</td>
+                            </tr>`;
+          }
+
+          html += `</table>`;
+
+          document.getElementById("resultado").innerHTML = html;
+        }, 1000);
+      }
+
+      function llamarFuncion(callback) {
+        console.log("Buscando el producto, espere por favor");
+        callback();
+      }
+
+      btnlistar.onclick = function () {
+        llamarFuncion(filtrar);
+      };
+    </script>
+  </body>
+</html>
